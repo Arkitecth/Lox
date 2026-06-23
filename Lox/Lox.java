@@ -1,14 +1,16 @@
-import java.nio.files.Files; 
-import java.nio.paths.Paths;
-import java.nio.charsets.Charset; 
+import java.nio.file.Files; 
+import java.nio.file.Paths;
+import java.nio.charset.Charset; 
 import java.io.InputStreamReader; 
+import java.io.IOException;
 import java.io.BufferedReader; 
+import java.util.List;
 
 public class Lox  {
+	static boolean hadError = false; 
 	public static void main(String[] args) throws IOException {
-		static boolean hadError = false; 
 		if(args.length > 1) {
-			System.println("Usage jlox [script]"); 
+			System.out.println("Usage jlox [script]"); 
 			System.exit(64); 
 		} else if(args.length == 1) {
 			runFile(args[0]); 
@@ -17,7 +19,7 @@ public class Lox  {
 		}
 	}
 
-	private static runFile(String[] path) throws IOException {
+	private static void runFile(String path) throws IOException {
 		byte[] bytes = Files.readAllBytes(Paths.get(path)); 
 		run(new String(bytes, Charset.defaultCharset())); 
 		if(hadError) {
@@ -25,7 +27,7 @@ public class Lox  {
 		}
 	}
 
-	private static runPrompt() throws IOException {
+	private static void runPrompt() throws IOException {
 		InputStreamReader input = new InputStreamReader(System.in); 
 		BufferedReader reader = new BufferedReader(input); 
 		for(;;) {
@@ -36,7 +38,7 @@ public class Lox  {
 		}
 	}
 
-	private static run(String src) {
+	private static void run(String src) {
 		Scanner scanner = new Scanner(src); 
 		List<Token> tokens = scanner.scanTokens();
 		for(Token token: tokens) {
